@@ -79,6 +79,9 @@ public class LineBotCallbackRequestParser {
             throw new LineBotCallbackException("Missing 'X-Line-Signature' header");
         }
 
+        log.error("signature: {}", signature);
+        log.error("payload: {}", payload);
+
         log.debug("got: {}", payload);
 
         final byte[] json = payload.getBytes(StandardCharsets.UTF_8);
