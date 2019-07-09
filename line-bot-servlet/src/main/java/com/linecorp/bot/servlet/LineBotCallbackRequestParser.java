@@ -90,7 +90,6 @@ public class LineBotCallbackRequestParser {
 
         if (!lineSignatureValidator.validateSignature(json, signature)) {
             log.error("wrongSign");
-//            throw new LineBotCallbackException("Invalid API signature");
         }
 
         final CallbackRequest callbackRequest = objectMapper.readValue(json, CallbackRequest.class);
