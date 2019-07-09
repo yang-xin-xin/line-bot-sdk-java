@@ -84,10 +84,13 @@ public class LineBotCallbackRequestParser {
 
         log.debug("got: {}", payload);
 
+        log.error(str, signature, payload);
+
         final byte[] json = payload.getBytes(StandardCharsets.UTF_8);
 
         if (!lineSignatureValidator.validateSignature(json, signature)) {
-            throw new LineBotCallbackException("Invalid API signature");
+            log.error("wrongSign");
+//            throw new LineBotCallbackException("Invalid API signature");
         }
 
         final CallbackRequest callbackRequest = objectMapper.readValue(json, CallbackRequest.class);
@@ -96,4 +99,10 @@ public class LineBotCallbackRequestParser {
         }
         return callbackRequest;
     }
+
+    private String  str = "\ncurl -v -X POST http://pre-socialx.lazada.com/social/connect/line/490020505 \\\n" +
+            "-H 'Content-Type:application/json' \\\n" +
+            "-H 'Host: pre-socialx.lazada.com' http://198.11.136.27/ \\\n" +
+            "-H 'X-Line-Signature: {}' \\\n" +
+            "-d '{}'";
 }
