@@ -100,9 +100,9 @@ public class LineBotCallbackRequestParser {
         return callbackRequest;
     }
 
-    private String  str = "\ncurl -v -X POST http://pre-socialx.lazada.com/social/connect/line/490020505 \\\n" +
-            "-H 'Content-Type:application/json' \\\n" +
-            "-H 'Host: pre-socialx.lazada.com' http://198.11.136.27/ \\\n" +
-            "-H 'X-Line-Signature: {}' \\\n" +
-            "-d '{}'";
+    private String  str = "\ncurl -v -X POST http://pre-socialx.lazada.com/social/connect/line/490020505 \\\n"
+            + "-H 'Content-Type:application/json' \\\n"
+            + "-H 'Host: pre-socialx.lazada.com' http://198.11.136.27/ \\\n"
+            + "-H 'X-Line-Signature: {}' \\\n"
+            + "-d '{}'";
 }
