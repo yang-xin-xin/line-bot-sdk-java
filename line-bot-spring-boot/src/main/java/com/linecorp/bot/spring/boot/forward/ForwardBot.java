@@ -22,11 +22,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -49,10 +45,18 @@ public class ForwardBot {
     @Autowired
     HttpRequest request;
 
+    @GetMapping("/{country}/{path}")
+    public ResponseEntity<Object> getReceived(
+            @PathVariable("country") String country,
+            @PathVariable("path") String path,
+            @RequestBody String payload) {
+        return onReceived(country, path, payload);
+    }
+
     /**
      * 接收回调
      */
-    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, value = "/{country}/{path}")
+    @PostMapping("/{country}/{path}")
     public ResponseEntity<Object> onReceived(
             @PathVariable("country") String country,
             @PathVariable("path") String path,
