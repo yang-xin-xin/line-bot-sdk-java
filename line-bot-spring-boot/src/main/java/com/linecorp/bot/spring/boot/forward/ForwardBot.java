@@ -29,7 +29,7 @@ public class ForwardBot {
      * 接收回调
      */
     @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, value = "/{country}/{path}")
-    public ResponseEntity onReceived(
+    public ResponseEntity<Object> onReceived(
             @PathVariable("country") String country,
             @PathVariable("path") String path,
             @RequestBody String payload) {
@@ -45,12 +45,12 @@ public class ForwardBot {
 
 
 
-        ResponseEntity entity = null;
+        ResponseEntity<Object> entity = null;
         HttpEntity<MultiValueMap<Object, String>> httpEntity = new HttpEntity(payload, httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
         switch (httpMethod) {
             case POST:
-                entity = restTemplate.postForEntity(url, httpEntity, String.class);
+                entity = restTemplate.postForEntity(url, httpEntity, Object.class);
                 break;
             default:
                 log.error("not support: " + httpMethod);
