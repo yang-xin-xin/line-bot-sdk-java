@@ -57,7 +57,7 @@ public class ForwardBot {
             @PathVariable("country") String country,
             @PathVariable("path") String path,
             @RequestBody String payload) {
-        log.info("Callback from ForwardBot begin, country:{}, payload:{}, path:{}", country, payload, path);
+        log.error("Callback from ForwardBot begin, country:{}, payload:{}, path:{}", country, payload, path);
         HttpHeaders httpHeaders = request.getHeaders();
         HttpMethod httpMethod = request.getMethod();
 
@@ -75,6 +75,9 @@ public class ForwardBot {
         switch (httpMethod) {
             case POST:
                 entity = restTemplate.postForEntity(url, httpEntity, Object.class);
+                break;
+            case GET:
+                entity = restTemplate.getForEntity(url, Object.class);
                 break;
             default:
                 log.error("not support: " + httpMethod);

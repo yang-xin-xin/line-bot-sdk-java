@@ -42,7 +42,7 @@ public class LineBotWebMvcConfigurer
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(lineBotServerInterceptor).addPathPatterns("/callback");
+//        registry.addInterceptor(lineBotServerInterceptor).addPathPatterns("/callback");
     }
 
     @Override
