@@ -46,7 +46,7 @@ public class ForwardBot {
 
 
         ResponseEntity<Object> entity = null;
-        HttpEntity<MultiValueMap<Object, String>> httpEntity = new HttpEntity(payload, httpHeaders);
+        HttpEntity<String> httpEntity = new HttpEntity<>(payload, httpHeaders);
         RestTemplate restTemplate = new RestTemplate();
         switch (httpMethod) {
             case POST:
