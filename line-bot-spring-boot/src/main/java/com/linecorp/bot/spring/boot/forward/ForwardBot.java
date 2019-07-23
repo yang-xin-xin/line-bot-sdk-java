@@ -1,0 +1,81 @@
+package com.linecorp.bot.spring.boot.forward;
+
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+
+
+/**
+ * 仅做转发通道使用
+ * 使用http加host调用预发链接
+ * @author yangxinxin
+ * 2019-07-22 20:25
+ */
+@Slf4j
+@RestController
+@RequestMapping("/social/connect/forward")
+public class ForwardBot {
+
+    @Autowired
+    HttpRequest request;
+
+    /**
+     * 接收回调
+     */
+    @RequestMapping(method = {RequestMethod.POST, RequestMethod.GET}, value = "/{country}/{path}")
+    public ResponseEntity onReceived(
+            @PathVariable("country") String country,
+            @PathVariable("path") String path,
+            @RequestBody String payload) {
+        log.info("Callback from ForwardBot begin, country:{}, payload:{}, path:{}", country, payload, path);
+        HttpHeaders httpHeaders = request.getHeaders();
+        HttpMethod httpMethod = request.getMethod();
+
+        // 处理数据
+        String host = HostMapping.getHost(country);
+        httpHeaders.add("Host", host);
+        String url = generateUrl(path, host);
+
+
+
+
+        ResponseEntity entity = null;
+        HttpEntity<MultiValueMap<Object, String>> httpEntity = new HttpEntity(payload, httpHeaders);
+        RestTemplate restTemplate = new RestTemplate();
+        switch (httpMethod) {
+            case POST:
+                entity = restTemplate.postForEntity(url, httpEntity, String.class);
+                break;
+            default:
+                log.error("not support: " + httpMethod);
+        }
+
+        return entity;
+    }
+
+    private static String generateUrl(String url, String host) {
+        try {
+            url = URLDecoder.decode(url, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error("decode err", e);
+        }
+        return url.replace(getDomain(url), host);
+    }
+
+    private static String getDomain(String url) {
+        return url.substring(url.indexOf("//") + 2, url.indexOf("/", 9));
+    }
+
+
+    public static void main(String[] agrs) {
+        String url = "https://pre-gcx.alibaba.com/icbu/xiaohe/portal.htm?pageId=365272&_param_digest_=cf6a6aaf27013cab82b822c1e3178ffd";
+        String host = HostMapping.getHost("hz");
+        System.out.println(generateUrl(url,host));
+    }
+}
